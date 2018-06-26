@@ -14,6 +14,9 @@ setwd(workdir)
 ### Read results from Collect
 nfi <- read.csv("collect-csv-data-export-sudan_nfi_2017-2018-06-25T14_28_53/tree.csv")
 
+### Read plot coordinates as measured in field
+df <- read.csv("collect-csv-data-export-sudan_nfi_2017-2018-06-25T14_28_53/plot_corr.csv")
+
 ### See how many trees are measured per SU
 (trees_measured <- table(nfi$su_su_no))
 plot(trees_measured)
@@ -39,11 +42,8 @@ nfi[is.na(nfi$tree_axis_distance),"tree_left_axis"] <- NA
 nfi[!is.na(nfi$tree_axis_distance) & is.na(nfi$tree_right_axis),"tree_right_axis"] <- 0
 nfi[!is.na(nfi$tree_axis_distance) & is.na(nfi$tree_left_axis), "tree_left_axis" ] <- 0
 
-### Read plot coordinates as measured in field
-df <- read.csv("collect-csv-data-export-sudan_nfi_2017-2018-06-25T14_28_53/plot.csv")
-names(df)
-
 ### CHECK IF COLLECTED AND PLANNED CORRESPOND
+names(df)
 plot(df$plot_access_plot_location_given_x,df$plot_access_plot_starting_position_x)
 plot(df$plot_access_plot_location_given_y,df$plot_access_plot_starting_position_y)
 
@@ -109,10 +109,19 @@ table(nfi$srs)
 ### Restrict to trees with coordinates
 nfi <- nfi[!is.na(nfi$tree_axis_distance),]
 
+write.csv(nfi,"trees_nfi_20180626.csv",row.names = F)
+
+nfi2 <- nfi[,c("su_su_no","plot_plot_no",
+              "tree_lucs","tree_or_stump","tree_species_scientific_name",
+              "diameter","tree_dbh","tree_height","tree_bole_height","crown_condition","x_utm","y_utm","srs")]
+
+names(nfi2) <- c("SU","plot",
+                "lucs","tr_st","specie",
+                "diam","dbh","height","bolet","crown","x_utm","y_utm","srs")
 ### Separate by UTM zone
-nfi_35 <- nfi[nfi$srs == "EPSG:32635",]
-nfi_34 <- nfi[nfi$srs == "EPSG:32634",]
-nfi_36 <- nfi[nfi$srs == "EPSG:32636",]
+nfi_35 <- nfi2[nfi2$srs == "EPSG:32635",]
+nfi_34 <- nfi2[nfi2$srs == "EPSG:32634",]
+nfi_36 <- nfi2[nfi2$srs == "EPSG:32636",]
 
 #################### Transform the list of points into a SPDF - UTM 34
 spdf_34 <- SpatialPointsDataFrame(coords = nfi_34[,c("x_utm","y_utm")],

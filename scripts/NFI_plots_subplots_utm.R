@@ -8,11 +8,13 @@
 time_start  <- Sys.time()
 
 ### Set working directory
-workdir      <-  "/media/dannunzio/OSDisk/Users/dannunzio/Documents/countries/sudan/data/ifn_plots/"
+workdir      <-  "/media/dannunzio/OSDisk/Users/dannunzio/Documents/countries/sudan/data/nfi_plots/"
 setwd(workdir)
 
 ### Read data tables of existing plots
-allp <- read.csv("plots_utm.csv")
+allp <- read.csv("all_nfi.csv")
+names(allp) <-  c("su","strata","NS","X","EW","Y","utm_n","utm_z",
+                  "x0","y0","x1","y1","x2","y2","x3","y3","x4","y4")
 
 proj_geo <- "+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs"
 proj_aea <- "+proj=aea +lat_1=20 +lat_2=-23 +lat_0=0 +lon_0=25 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
@@ -72,7 +74,7 @@ for(zone in 34:37){
   
   length(lp)
   
-  df <- all[,c("su","Strata")]
+  df <- all[,c("su","strata")]
   
   data<- df[rep(seq_len(nrow(df)), each=5),]
   
