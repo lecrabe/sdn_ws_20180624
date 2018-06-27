@@ -1,6 +1,6 @@
 ####################################################################################################
 ####################################################################################################
-## Clip available products for Tunisia
+## Spatialize NFI tree information
 ## Contact remi.dannunzio@fao.org 
 ## 2018/04/17
 ####################################################################################################
@@ -112,12 +112,12 @@ nfi <- nfi[!is.na(nfi$tree_axis_distance),]
 write.csv(nfi,"trees_nfi_20180626.csv",row.names = F)
 
 nfi2 <- nfi[,c("su_su_no","plot_plot_no",
-              "tree_lucs","tree_or_stump","tree_species_scientific_name",
-              "diameter","tree_dbh","tree_height","tree_bole_height","crown_condition","x_utm","y_utm","srs")]
+               "tree_lucs","tree_or_stump","tree_species_scientific_name",
+               "diameter","tree_dbh","tree_height","tree_bole_height","crown_condition","x_utm","y_utm","srs")]
 
 names(nfi2) <- c("SU","plot",
-                "lucs","tr_st","specie",
-                "diam","dbh","height","bolet","crown","x_utm","y_utm","srs")
+                 "lucs","tr_st","specie",
+                 "diam","dbh","height","bolet","crown","x_utm","y_utm","srs")
 ### Separate by UTM zone
 nfi_35 <- nfi2[nfi2$srs == "EPSG:32635",]
 nfi_34 <- nfi2[nfi2$srs == "EPSG:32634",]
